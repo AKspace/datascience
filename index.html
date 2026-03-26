@@ -1,0 +1,659 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DS Mastery Plan — Anurag Kushwaha</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Fraunces:ital,wght@0,300;0,600;1,300&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --ink: #0f0f0f;
+  --paper: #fafaf7;
+  --surface: #f2f2ec;
+  --surface2: #e8e8e0;
+  --border: #d8d8ce;
+  --accent: #1a4a8a;
+  --accent2: #c8401a;
+  --green: #1a6b3a;
+  --amber: #b85c00;
+  --muted: #666660;
+  --phase1: #1a4a8a;
+  --phase2: #6b1a8a;
+  --mono: 'DM Mono', monospace;
+  --serif: 'Fraunces', serif;
+  --sans: 'DM Sans', sans-serif;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: var(--sans); background: var(--paper); color: var(--ink); font-size: 15px; line-height: 1.6; }
+
+/* NAV */
+nav { position: sticky; top: 0; z-index: 100; background: var(--ink); color: white; display: flex; align-items: center; justify-content: space-between; padding: 0 2rem; height: 52px; }
+.nav-brand { font-family: var(--serif); font-size: 18px; font-weight: 600; }
+.nav-links { display: flex; gap: 4px; }
+.nav-btn { background: none; border: none; color: rgba(255,255,255,0.7); font-family: var(--sans); font-size: 13px; padding: 6px 14px; border-radius: 4px; cursor: pointer; transition: all 0.15s; }
+.nav-btn:hover, .nav-btn.active { background: rgba(255,255,255,0.15); color: white; }
+
+/* HEADER */
+header { background: var(--ink); color: white; padding: 3rem 2rem 2.5rem; }
+.header-inner { max-width: 1100px; margin: 0 auto; }
+.header-label { font-family: var(--mono); font-size: 11px; color: rgba(255,255,255,0.5); letter-spacing: 0.12em; text-transform: uppercase; margin-bottom: 0.5rem; }
+header h1 { font-family: var(--serif); font-size: 36px; font-weight: 300; margin-bottom: 0.25rem; }
+header h1 span { color: #7ab3f5; font-style: italic; }
+.header-sub { font-size: 14px; color: rgba(255,255,255,0.6); margin-bottom: 1.5rem; }
+.master-progress { background: rgba(255,255,255,0.08); border-radius: 8px; padding: 1rem 1.25rem; }
+.mp-row { display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px; }
+.mp-label { font-size: 13px; color: rgba(255,255,255,0.7); }
+.mp-pct { font-family: var(--mono); font-size: 20px; font-weight: 500; color: #7ab3f5; }
+.mp-bar-bg { height: 6px; background: rgba(255,255,255,0.12); border-radius: 3px; overflow: hidden; }
+.mp-bar-fill { height: 100%; background: linear-gradient(90deg, #7ab3f5, #a78bf5); border-radius: 3px; transition: width 0.6s ease; }
+.mp-stats { display: flex; gap: 2rem; margin-top: 0.75rem; }
+.mp-stat { font-size: 12px; color: rgba(255,255,255,0.5); }
+.mp-stat strong { color: rgba(255,255,255,0.85); font-weight: 500; }
+
+/* MAIN */
+main { max-width: 1100px; margin: 0 auto; padding: 2rem; }
+
+/* VIEWS */
+.view { display: none; }
+.view.active { display: block; }
+
+/* WEEK GRID */
+.phase-label { font-family: var(--mono); font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); margin: 2rem 0 1rem; display: flex; align-items: center; gap: 8px; }
+.phase-label::after { content: ''; flex: 1; height: 0.5px; background: var(--border); }
+.phase-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+.phase1 { background: var(--phase1); }
+.phase2 { background: var(--phase2); }
+
+.week-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 12px; margin-bottom: 1rem; }
+.week-card { background: white; border: 0.5px solid var(--border); border-radius: 10px; padding: 1rem 1.125rem; cursor: pointer; transition: all 0.15s; position: relative; overflow: hidden; }
+.week-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; }
+.week-card.p1::before { background: var(--phase1); }
+.week-card.p2::before { background: var(--phase2); }
+.week-card:hover { box-shadow: 0 4px 16px rgba(0,0,0,0.08); transform: translateY(-1px); }
+.week-num { font-family: var(--mono); font-size: 11px; color: var(--muted); margin-bottom: 4px; }
+.week-title { font-size: 14px; font-weight: 500; margin-bottom: 6px; line-height: 1.4; }
+.week-goal { font-size: 12px; color: var(--muted); line-height: 1.5; margin-bottom: 10px; }
+.week-bar-bg { height: 4px; background: var(--surface2); border-radius: 2px; overflow: hidden; margin-bottom: 4px; }
+.week-bar-fill { height: 100%; border-radius: 2px; transition: width 0.4s; }
+.w-p1 { background: var(--phase1); }
+.w-p2 { background: var(--phase2); }
+.week-pct { font-family: var(--mono); font-size: 11px; color: var(--muted); }
+
+/* DAY VIEW */
+.back-btn { background: none; border: 0.5px solid var(--border); color: var(--ink); font-family: var(--sans); font-size: 13px; padding: 6px 14px; border-radius: 6px; cursor: pointer; margin-bottom: 1.5rem; display: inline-flex; align-items: center; gap: 6px; }
+.back-btn:hover { background: var(--surface); }
+.week-header { margin-bottom: 1.5rem; }
+.week-header-num { font-family: var(--mono); font-size: 11px; color: var(--muted); }
+.week-header-title { font-family: var(--serif); font-size: 26px; font-weight: 300; margin: 4px 0; }
+.week-header-goal { font-size: 13px; color: var(--muted); font-style: italic; }
+.week-progress-bar { height: 6px; background: var(--surface2); border-radius: 3px; margin: 1rem 0; overflow: hidden; }
+.week-progress-fill { height: 100%; border-radius: 3px; transition: width 0.5s; }
+
+.day-list { display: flex; flex-direction: column; gap: 10px; }
+.day-card { background: white; border: 0.5px solid var(--border); border-radius: 10px; overflow: hidden; }
+.day-header { display: flex; align-items: center; gap: 12px; padding: 12px 16px; cursor: pointer; }
+.day-check { width: 22px; height: 22px; border: 1.5px solid var(--border); border-radius: 50%; flex-shrink: 0; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: all 0.15s; }
+.day-check.done { background: var(--green); border-color: var(--green); }
+.day-check.done::after { content: '✓'; color: white; font-size: 12px; font-weight: 500; }
+.day-check.partial { background: var(--amber); border-color: var(--amber); }
+.day-check.partial::after { content: '~'; color: white; font-size: 12px; font-weight: 500; }
+.day-info { flex: 1; }
+.day-num { font-family: var(--mono); font-size: 10px; color: var(--muted); }
+.day-topic { font-size: 14px; font-weight: 500; }
+.day-chevron { color: var(--muted); font-size: 16px; transition: transform 0.2s; }
+.day-chevron.open { transform: rotate(90deg); }
+.day-body { display: none; padding: 0 16px 16px 50px; border-top: 0.5px solid var(--surface2); }
+.day-body.open { display: block; }
+.task-list { margin-top: 12px; }
+.task-item { display: flex; gap: 10px; align-items: flex-start; margin-bottom: 8px; }
+.task-cb { width: 16px; height: 16px; border: 1.5px solid var(--border); border-radius: 3px; flex-shrink: 0; margin-top: 2px; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.15s; }
+.task-cb.checked { background: var(--green); border-color: var(--green); }
+.task-cb.checked::after { content: '✓'; color: white; font-size: 10px; }
+.task-text { font-size: 13px; color: var(--ink); line-height: 1.5; cursor: pointer; }
+.task-text.checked { text-decoration: line-through; color: var(--muted); }
+.res-section { margin-top: 14px; }
+.res-label { font-family: var(--mono); font-size: 10px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 6px; }
+.res-links { display: flex; flex-wrap: wrap; gap: 6px; }
+.res-link { font-size: 12px; color: var(--accent); border: 0.5px solid #b5d4f4; background: #e6f1fb; padding: 3px 10px; border-radius: 20px; text-decoration: none; transition: all 0.15s; }
+.res-link:hover { background: var(--accent); color: white; }
+.notes-area { width: 100%; margin-top: 12px; padding: 8px 10px; border: 0.5px solid var(--border); border-radius: 6px; font-family: var(--sans); font-size: 13px; color: var(--ink); background: var(--surface); resize: vertical; min-height: 60px; }
+.notes-area:focus { outline: none; border-color: var(--accent); }
+.save-note-btn { margin-top: 6px; background: var(--accent); color: white; border: none; padding: 5px 14px; border-radius: 5px; font-size: 12px; cursor: pointer; }
+
+/* PORTALS */
+.portal-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 10px; }
+.portal-card { background: white; border: 0.5px solid var(--border); border-radius: 10px; padding: 1rem; text-decoration: none; color: inherit; transition: all 0.15s; display: block; }
+.portal-card:hover { box-shadow: 0 4px 12px rgba(0,0,0,0.08); transform: translateY(-1px); }
+.portal-cat { font-family: var(--mono); font-size: 10px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 4px; }
+.portal-name { font-size: 14px; font-weight: 500; color: var(--accent); margin-bottom: 4px; }
+.portal-desc { font-size: 12px; color: var(--muted); line-height: 1.5; }
+.portal-cats { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 1rem; }
+.cat-filter { font-size: 12px; padding: 4px 12px; border-radius: 20px; border: 0.5px solid var(--border); background: white; cursor: pointer; color: var(--muted); transition: all 0.15s; }
+.cat-filter.active, .cat-filter:hover { background: var(--ink); color: white; border-color: var(--ink); }
+
+/* ADD RESOURCE */
+.add-res-form { background: white; border: 0.5px solid var(--border); border-radius: 10px; padding: 1.5rem; margin-bottom: 1.5rem; }
+.form-title { font-family: var(--serif); font-size: 18px; font-weight: 300; margin-bottom: 1rem; }
+.form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 12px; }
+.form-group { display: flex; flex-direction: column; gap: 4px; }
+.form-group.full { grid-column: 1 / -1; }
+label { font-size: 12px; color: var(--muted); font-weight: 500; }
+input, select, textarea { padding: 8px 10px; border: 0.5px solid var(--border); border-radius: 6px; font-family: var(--sans); font-size: 13px; color: var(--ink); background: var(--surface); width: 100%; }
+input:focus, select:focus, textarea:focus { outline: none; border-color: var(--accent); background: white; }
+.btn-primary { background: var(--ink); color: white; border: none; padding: 8px 20px; border-radius: 6px; font-family: var(--sans); font-size: 13px; cursor: pointer; transition: opacity 0.15s; }
+.btn-primary:hover { opacity: 0.85; }
+.btn-danger { background: #fee; color: var(--accent2); border: 0.5px solid #fcc; padding: 4px 10px; border-radius: 5px; font-size: 12px; cursor: pointer; }
+
+/* CUSTOM RESOURCES LIST */
+.custom-res-list { display: flex; flex-direction: column; gap: 8px; margin-top: 1rem; }
+.custom-res-item { background: white; border: 0.5px solid var(--border); border-radius: 8px; padding: 10px 14px; display: flex; align-items: center; gap: 12px; }
+.custom-res-info { flex: 1; }
+.custom-res-name { font-size: 13px; font-weight: 500; color: var(--accent); }
+.custom-res-meta { font-size: 11px; color: var(--muted); margin-top: 2px; }
+
+/* REPORT */
+.report-box { background: var(--ink); color: white; border-radius: 10px; padding: 1.5rem; margin-bottom: 1.5rem; }
+.report-title { font-family: var(--serif); font-size: 22px; font-weight: 300; margin-bottom: 0.5rem; }
+.report-subtitle { font-size: 13px; color: rgba(255,255,255,0.5); margin-bottom: 1.5rem; }
+.report-section { margin-bottom: 1.25rem; }
+.report-section-title { font-family: var(--mono); font-size: 11px; text-transform: uppercase; letter-spacing: 0.1em; color: rgba(255,255,255,0.4); margin-bottom: 6px; }
+.report-text { font-size: 13px; color: rgba(255,255,255,0.85); line-height: 1.7; white-space: pre-wrap; font-family: var(--mono); }
+.copy-btn { background: rgba(255,255,255,0.1); color: white; border: 0.5px solid rgba(255,255,255,0.2); padding: 7px 16px; border-radius: 6px; font-size: 13px; cursor: pointer; margin-top: 1rem; transition: all 0.15s; }
+.copy-btn:hover { background: rgba(255,255,255,0.2); }
+.report-stats-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-bottom: 1.5rem; }
+.r-stat { background: white; border-radius: 8px; padding: 12px; text-align: center; }
+.r-stat-val { font-size: 24px; font-weight: 500; color: var(--accent); }
+.r-stat-label { font-size: 11px; color: var(--muted); margin-top: 2px; }
+
+/* SECTION TITLES */
+.section-hd { display: flex; align-items: center; justify-content: space-between; margin-bottom: 1rem; }
+.section-hd h2 { font-family: var(--serif); font-size: 22px; font-weight: 300; }
+.section-hd p { font-size: 13px; color: var(--muted); }
+
+/* TOAST */
+.toast { position: fixed; bottom: 1.5rem; right: 1.5rem; background: var(--ink); color: white; padding: 10px 18px; border-radius: 8px; font-size: 13px; opacity: 0; transform: translateY(10px); transition: all 0.25s; pointer-events: none; z-index: 999; }
+.toast.show { opacity: 1; transform: translateY(0); }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-brand">DS Mastery</div>
+  <div class="nav-links">
+    <button class="nav-btn active" onclick="showView('plan')">Plan</button>
+    <button class="nav-btn" onclick="showView('portals')">Portals</button>
+    <button class="nav-btn" onclick="showView('resources')">My Resources</button>
+    <button class="nav-btn" onclick="showView('report')">Report</button>
+  </div>
+</nav>
+
+<header>
+  <div class="header-inner">
+    <div class="header-label">Data Science Mastery Plan</div>
+    <h1>Anurag <span>Kushwaha</span></h1>
+    <div class="header-sub" id="header-sub">Loading...</div>
+    <div class="master-progress">
+      <div class="mp-row">
+        <span class="mp-label">Overall Progress</span>
+        <span class="mp-pct" id="master-pct">0%</span>
+      </div>
+      <div class="mp-bar-bg"><div class="mp-bar-fill" id="master-bar" style="width:0%"></div></div>
+      <div class="mp-stats">
+        <span class="mp-stat"><strong id="tasks-done">0</strong> tasks done</span>
+        <span class="mp-stat"><strong id="days-done">0</strong> days complete</span>
+        <span class="mp-stat"><strong id="weeks-done">0</strong> weeks complete</span>
+      </div>
+    </div>
+  </div>
+</header>
+
+<main>
+  <!-- PLAN VIEW -->
+  <div id="view-plan" class="view active">
+    <div id="week-list-view">
+      <div class="phase-label"><span class="phase-dot phase1"></span>Phase 1 — Foundation (Weeks 1–4)</div>
+      <div class="week-grid" id="grid-phase1"></div>
+      <div class="phase-label" style="margin-top:2rem"><span class="phase-dot phase2"></span>Phase 2 — Depth & Expertise (Weeks 5–8)</div>
+      <div class="week-grid" id="grid-phase2"></div>
+    </div>
+    <div id="week-detail-view" style="display:none">
+      <button class="back-btn" onclick="showWeekList()">&#8592; Back to plan</button>
+      <div id="week-detail-content"></div>
+    </div>
+  </div>
+
+  <!-- PORTALS VIEW -->
+  <div id="view-portals" class="view">
+    <div class="section-hd">
+      <h2>Learning Portals</h2>
+      <p>Direct access to all study resources</p>
+    </div>
+    <div class="portal-cats" id="portal-cats"></div>
+    <div class="portal-grid" id="portal-grid"></div>
+  </div>
+
+  <!-- RESOURCES VIEW -->
+  <div id="view-resources" class="view">
+    <div class="add-res-form">
+      <div class="form-title">Add a Resource</div>
+      <div class="form-row">
+        <div class="form-group"><label>Resource Name *</label><input type="text" id="res-name" placeholder="e.g. Fast.ai Deep Learning Course"></div>
+        <div class="form-group"><label>URL *</label><input type="url" id="res-url" placeholder="https://..."></div>
+      </div>
+      <div class="form-row">
+        <div class="form-group"><label>Category</label>
+          <select id="res-cat">
+            <option>Practice</option><option>Learning</option><option>Reference</option><option>Projects</option><option>NLP/AI</option><option>Tools</option><option>Reading</option><option>Certification</option><option>Other</option>
+          </select>
+        </div>
+        <div class="form-group"><label>Related Week (optional)</label>
+          <select id="res-week"><option value="">— No specific week —</option></select>
+        </div>
+      </div>
+      <div class="form-group full" style="margin-bottom:12px"><label>Notes</label><textarea id="res-notes" rows="2" placeholder="Why is this resource useful?"></textarea></div>
+      <button class="btn-primary" onclick="addCustomResource()">Add Resource</button>
+    </div>
+    <div class="section-hd"><h2>My Saved Resources</h2></div>
+    <div class="custom-res-list" id="custom-res-list"></div>
+  </div>
+
+  <!-- REPORT VIEW -->
+  <div id="view-report" class="view">
+    <div class="section-hd" style="margin-bottom:1.5rem">
+      <div><h2>Progress Report</h2><p>Copy and paste into any AI agent to generate a mock test</p></div>
+      <button class="btn-primary" onclick="generateReport()">Refresh Report</button>
+    </div>
+    <div class="report-stats-grid" id="report-stats"></div>
+    <div class="report-box">
+      <div class="report-title">AI Mock Test Brief</div>
+      <div class="report-subtitle">Share this with Claude, ChatGPT, or any AI agent to generate a personalised mock interview test</div>
+      <div class="report-section">
+        <div class="report-section-title">Candidate Profile</div>
+        <div class="report-text" id="report-profile"></div>
+      </div>
+      <div class="report-section">
+        <div class="report-section-title">Topics Completed</div>
+        <div class="report-text" id="report-completed"></div>
+      </div>
+      <div class="report-section">
+        <div class="report-section-title">Topics Not Yet Started</div>
+        <div class="report-text" id="report-pending"></div>
+      </div>
+      <div class="report-section">
+        <div class="report-section-title">Instruction for AI Agent</div>
+        <div class="report-text" id="report-instruction"></div>
+      </div>
+      <button class="copy-btn" onclick="copyReport()">Copy full report to clipboard</button>
+    </div>
+    <div class="section-hd" style="margin-bottom:1rem"><h2>Week-by-week Breakdown</h2></div>
+    <div id="report-weeks"></div>
+  </div>
+</main>
+
+<div class="toast" id="toast"></div>
+
+<script src="data.js"></script>
+<script>
+// ── STATE ──────────────────────────────────────────────────────────────────
+const STATE_KEY = 'ds_plan_state_v1';
+let state = { tasks: {}, notes: {}, customResources: [], startDate: STUDY_DATA.meta.startDate };
+
+function loadState() {
+  try { const s = localStorage.getItem(STATE_KEY); if (s) state = { ...state, ...JSON.parse(s) }; } catch(e) {}
+}
+function saveState() {
+  try { localStorage.setItem(STATE_KEY, JSON.stringify(state)); } catch(e) {}
+}
+function taskKey(week, day, taskIdx) { return `w${week}_d${day}_t${taskIdx}`; }
+function noteKey(week, day) { return `note_w${week}_d${day}`; }
+
+// ── PROGRESS CALC ─────────────────────────────────────────────────────────
+function calcProgress() {
+  let totalTasks = 0, doneTasks = 0, totalDays = 0, doneDays = 0, totalWeeks = 0, doneWeeks = 0;
+  const weekStats = {};
+  STUDY_DATA.weeks.forEach(w => {
+    totalWeeks++;
+    let wTotal = 0, wDone = 0;
+    w.days.forEach(d => {
+      totalDays++;
+      let dTotal = d.tasks.length, dDone = 0;
+      d.tasks.forEach((_, ti) => {
+        totalTasks++;
+        wTotal++;
+        if (state.tasks[taskKey(w.week, d.day, ti)]) { doneTasks++; wDone++; dDone++; }
+      });
+      if (dDone === dTotal) doneDays++;
+    });
+    if (wDone === wTotal) doneWeeks++;
+    weekStats[w.week] = { total: wTotal, done: wDone, pct: wTotal > 0 ? Math.round((wDone/wTotal)*100) : 0 };
+  });
+  return { totalTasks, doneTasks, totalDays, doneDays, totalWeeks, doneWeeks,
+    overallPct: totalTasks > 0 ? Math.round((doneTasks/totalTasks)*100) : 0, weekStats };
+}
+
+function updateHeader() {
+  const p = calcProgress();
+  document.getElementById('master-pct').textContent = p.overallPct + '%';
+  document.getElementById('master-bar').style.width = p.overallPct + '%';
+  document.getElementById('tasks-done').textContent = p.doneTasks;
+  document.getElementById('days-done').textContent = p.doneDays;
+  document.getElementById('weeks-done').textContent = p.doneWeeks;
+  const start = new Date(state.startDate);
+  const now = new Date();
+  const daysSince = Math.floor((now - start) / 86400000);
+  const weekNum = Math.min(8, Math.floor(daysSince / 7) + 1);
+  document.getElementById('header-sub').textContent =
+    `${STUDY_DATA.meta.title} · Week ${weekNum} of 8 · Started ${start.toLocaleDateString('en-US', {month:'long', day:'numeric', year:'numeric'})}`;
+}
+
+// ── VIEWS ─────────────────────────────────────────────────────────────────
+function showView(name) {
+  document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+  document.getElementById('view-' + name).classList.add('active');
+  document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+  event.target.classList.add('active');
+  if (name === 'report') generateReport();
+  if (name === 'portals') renderPortals();
+  if (name === 'resources') renderCustomResources();
+}
+
+// ── WEEK LIST ─────────────────────────────────────────────────────────────
+function renderWeekList() {
+  const p = calcProgress();
+  ['phase1','phase2'].forEach(ph => document.getElementById('grid-' + ph).innerHTML = '');
+  STUDY_DATA.weeks.forEach(w => {
+    const stats = p.weekStats[w.week];
+    const ph = w.phase === 1 ? 'phase1' : 'phase2';
+    const card = document.createElement('div');
+    card.className = `week-card p${w.phase}`;
+    card.onclick = () => showWeekDetail(w.week);
+    card.innerHTML = `
+      <div class="week-num">Week ${w.week} · Phase ${w.phase}</div>
+      <div class="week-title">${w.title}</div>
+      <div class="week-goal">${w.goal}</div>
+      <div class="week-bar-bg"><div class="week-bar-fill w-p${w.phase}" style="width:${stats.pct}%"></div></div>
+      <div class="week-pct">${stats.done} / ${stats.total} tasks · ${stats.pct}%</div>`;
+    document.getElementById('grid-' + ph).appendChild(card);
+  });
+}
+
+function showWeekList() {
+  document.getElementById('week-list-view').style.display = '';
+  document.getElementById('week-detail-view').style.display = 'none';
+  renderWeekList();
+}
+
+// ── WEEK DETAIL ───────────────────────────────────────────────────────────
+function showWeekDetail(weekNum) {
+  const w = STUDY_DATA.weeks.find(x => x.week === weekNum);
+  const p = calcProgress();
+  const stats = p.weekStats[weekNum];
+  document.getElementById('week-list-view').style.display = 'none';
+  document.getElementById('week-detail-view').style.display = 'block';
+  const el = document.getElementById('week-detail-content');
+  el.innerHTML = `
+    <div class="week-header">
+      <div class="week-header-num">Week ${w.week} · Phase ${w.phase} · ${w.phase === 1 ? 'Foundation' : 'Depth & Expertise'}</div>
+      <div class="week-header-title">${w.title}</div>
+      <div class="week-header-goal">Goal: ${w.goal}</div>
+      <div class="week-progress-bar"><div class="week-progress-fill w-p${w.phase}" id="wpf-${weekNum}" style="width:${stats.pct}%"></div></div>
+      <div class="week-pct" id="wps-${weekNum}">${stats.done} / ${stats.total} tasks (${stats.pct}%)</div>
+    </div>
+    <div class="day-list" id="day-list-${weekNum}"></div>`;
+  const dayList = document.getElementById('day-list-' + weekNum);
+  w.days.forEach(d => {
+    const doneCount = d.tasks.filter((_,ti) => state.tasks[taskKey(weekNum, d.day, ti)]).length;
+    const isDone = doneCount === d.tasks.length;
+    const isPartial = doneCount > 0 && !isDone;
+    const savedNote = state.notes[noteKey(weekNum, d.day)] || '';
+    const card = document.createElement('div');
+    card.className = 'day-card';
+    card.id = `day-card-${weekNum}-${d.day}`;
+    card.innerHTML = `
+      <div class="day-header" onclick="toggleDay(${weekNum},${d.day})">
+        <div class="day-check ${isDone?'done':isPartial?'partial':''}" id="dc-${weekNum}-${d.day}"></div>
+        <div class="day-info">
+          <div class="day-num">Day ${d.day}</div>
+          <div class="day-topic">${d.topic}</div>
+        </div>
+        <div class="day-chevron" id="chev-${weekNum}-${d.day}">›</div>
+      </div>
+      <div class="day-body" id="db-${weekNum}-${d.day}">
+        <div class="task-list">
+          ${d.tasks.map((t, ti) => {
+            const checked = state.tasks[taskKey(weekNum, d.day, ti)];
+            return `<div class="task-item">
+              <div class="task-cb ${checked?'checked':''}" id="tcb-${weekNum}-${d.day}-${ti}" onclick="toggleTask(${weekNum},${d.day},${ti})"></div>
+              <div class="task-text ${checked?'checked':''}" id="tt-${weekNum}-${d.day}-${ti}" onclick="toggleTask(${weekNum},${d.day},${ti})">${t}</div>
+            </div>`;
+          }).join('')}
+        </div>
+        ${d.resources && d.resources.length > 0 ? `
+        <div class="res-section">
+          <div class="res-label">Resources</div>
+          <div class="res-links">${d.resources.map(r => `<a href="${r.url}" target="_blank" class="res-link">${r.name}</a>`).join('')}</div>
+        </div>` : ''}
+        <textarea class="notes-area" id="note-${weekNum}-${d.day}" placeholder="Add your notes, learnings, or blockers here...">${savedNote}</textarea>
+        <button class="save-note-btn" onclick="saveNote(${weekNum},${d.day})">Save note</button>
+      </div>`;
+    dayList.appendChild(card);
+  });
+}
+
+function toggleDay(weekNum, dayNum) {
+  const body = document.getElementById(`db-${weekNum}-${dayNum}`);
+  const chev = document.getElementById(`chev-${weekNum}-${dayNum}`);
+  body.classList.toggle('open');
+  chev.classList.toggle('open');
+}
+
+function toggleTask(weekNum, dayNum, taskIdx) {
+  const key = taskKey(weekNum, dayNum, taskIdx);
+  state.tasks[key] = !state.tasks[key];
+  saveState();
+  const checked = state.tasks[key];
+  document.getElementById(`tcb-${weekNum}-${dayNum}-${taskIdx}`).className = `task-cb ${checked?'checked':''}`;
+  document.getElementById(`tt-${weekNum}-${dayNum}-${taskIdx}`).className = `task-text ${checked?'checked':''}`;
+  updateDayCheck(weekNum, dayNum);
+  updateWeekProgress(weekNum);
+  updateHeader();
+}
+
+function updateDayCheck(weekNum, dayNum) {
+  const w = STUDY_DATA.weeks.find(x => x.week === weekNum);
+  const d = w.days.find(x => x.day === dayNum);
+  const doneCount = d.tasks.filter((_,ti) => state.tasks[taskKey(weekNum, dayNum, ti)]).length;
+  const isDone = doneCount === d.tasks.length;
+  const isPartial = doneCount > 0 && !isDone;
+  const el = document.getElementById(`dc-${weekNum}-${dayNum}`);
+  if (el) el.className = `day-check ${isDone?'done':isPartial?'partial':''}`;
+}
+
+function updateWeekProgress(weekNum) {
+  const p = calcProgress();
+  const stats = p.weekStats[weekNum];
+  const bar = document.getElementById(`wpf-${weekNum}`);
+  const txt = document.getElementById(`wps-${weekNum}`);
+  if (bar) bar.style.width = stats.pct + '%';
+  if (txt) txt.textContent = `${stats.done} / ${stats.total} tasks (${stats.pct}%)`;
+}
+
+function saveNote(weekNum, dayNum) {
+  const val = document.getElementById(`note-${weekNum}-${dayNum}`).value;
+  state.notes[noteKey(weekNum, dayNum)] = val;
+  saveState();
+  showToast('Note saved');
+}
+
+// ── PORTALS ───────────────────────────────────────────────────────────────
+function renderPortals(filterCat = 'All') {
+  const cats = ['All', ...new Set(STUDY_DATA.portals.map(p => p.category))];
+  const catEl = document.getElementById('portal-cats');
+  catEl.innerHTML = cats.map(c => `<button class="cat-filter ${c===filterCat?'active':''}" onclick="renderPortals('${c}')">${c}</button>`).join('');
+  const portals = filterCat === 'All' ? STUDY_DATA.portals : STUDY_DATA.portals.filter(p => p.category === filterCat);
+  document.getElementById('portal-grid').innerHTML = portals.map(p => `
+    <a href="${p.url}" target="_blank" class="portal-card">
+      <div class="portal-cat">${p.category}</div>
+      <div class="portal-name">${p.name}</div>
+      <div class="portal-desc">${p.desc}</div>
+    </a>`).join('');
+}
+
+// ── CUSTOM RESOURCES ──────────────────────────────────────────────────────
+function initWeekSelect() {
+  const sel = document.getElementById('res-week');
+  STUDY_DATA.weeks.forEach(w => {
+    const opt = document.createElement('option');
+    opt.value = w.week;
+    opt.textContent = `Week ${w.week} — ${w.title}`;
+    sel.appendChild(opt);
+  });
+}
+
+function addCustomResource() {
+  const name = document.getElementById('res-name').value.trim();
+  const url = document.getElementById('res-url').value.trim();
+  if (!name || !url) { showToast('Please enter name and URL'); return; }
+  const res = { id: Date.now(), name, url, category: document.getElementById('res-cat').value, week: document.getElementById('res-week').value, notes: document.getElementById('res-notes').value.trim(), added: new Date().toISOString() };
+  state.customResources.push(res);
+  saveState();
+  document.getElementById('res-name').value = '';
+  document.getElementById('res-url').value = '';
+  document.getElementById('res-notes').value = '';
+  renderCustomResources();
+  showToast('Resource added');
+}
+
+function deleteCustomResource(id) {
+  state.customResources = state.customResources.filter(r => r.id !== id);
+  saveState();
+  renderCustomResources();
+  showToast('Resource removed');
+}
+
+function renderCustomResources() {
+  const el = document.getElementById('custom-res-list');
+  if (!state.customResources || state.customResources.length === 0) {
+    el.innerHTML = '<div style="color:var(--muted);font-size:13px;padding:1rem 0;">No resources added yet. Add your first one above.</div>';
+    return;
+  }
+  el.innerHTML = state.customResources.map(r => `
+    <div class="custom-res-item">
+      <div class="custom-res-info">
+        <div><a href="${r.url}" target="_blank" class="custom-res-name">${r.name}</a></div>
+        <div class="custom-res-meta">${r.category}${r.week ? ' · Week ' + r.week : ''}${r.notes ? ' · ' + r.notes : ''}</div>
+      </div>
+      <button class="btn-danger" onclick="deleteCustomResource(${r.id})">Remove</button>
+    </div>`).join('');
+}
+
+// ── REPORT ────────────────────────────────────────────────────────────────
+function generateReport() {
+  const p = calcProgress();
+  document.getElementById('report-stats').innerHTML = `
+    <div class="r-stat"><div class="r-stat-val">${p.overallPct}%</div><div class="r-stat-label">Overall progress</div></div>
+    <div class="r-stat"><div class="r-stat-val">${p.doneTasks}/${p.totalTasks}</div><div class="r-stat-label">Tasks completed</div></div>
+    <div class="r-stat"><div class="r-stat-val">${p.doneWeeks}/8</div><div class="r-stat-label">Weeks complete</div></div>
+    <div class="r-stat"><div class="r-stat-val">${(state.customResources||[]).length}</div><div class="r-stat-label">Resources added</div></div>`;
+
+  const completedTopics = [];
+  const pendingTopics = [];
+  const weekBreakdown = [];
+  STUDY_DATA.weeks.forEach(w => {
+    const stats = p.weekStats[w.week];
+    const completedDays = [];
+    const pendingDays = [];
+    w.days.forEach(d => {
+      const doneCount = d.tasks.filter((_,ti) => state.tasks[taskKey(w.week, d.day, ti)]).length;
+      const note = state.notes[noteKey(w.week, d.day)] || '';
+      if (doneCount === d.tasks.length) {
+        completedTopics.push(`Week ${w.week} Day ${d.day}: ${d.topic}`);
+        completedDays.push({ day: d.day, topic: d.topic, note, status: 'complete' });
+      } else if (doneCount > 0) {
+        completedTopics.push(`Week ${w.week} Day ${d.day}: ${d.topic} (partial — ${doneCount}/${d.tasks.length} tasks)`);
+        completedDays.push({ day: d.day, topic: d.topic, note, status: 'partial', done: doneCount, total: d.tasks.length });
+      } else {
+        pendingTopics.push(`Week ${w.week} Day ${d.day}: ${d.topic}`);
+        pendingDays.push({ day: d.day, topic: d.topic });
+      }
+    });
+    weekBreakdown.push({ week: w, stats, completedDays, pendingDays });
+  });
+
+  const profileText = `Candidate: ${STUDY_DATA.meta.name}
+Role Target: Data Scientist / Data Engineer / ML Engineer
+Background: 7+ years SRE & Cloud Platform Engineering at UBS Investment Bank (Infosys)
+Assessment score (pre-study): 11/12 on conceptual Python/ML/SQL questions — mid-level
+Study plan: 8-week structured DS mastery plan
+Study start date: ${state.startDate}
+Overall progress: ${p.overallPct}% (${p.doneTasks}/${p.totalTasks} tasks, ${p.doneWeeks}/8 weeks)`;
+
+  const completedText = completedTopics.length > 0 ? completedTopics.join('\n') : 'No topics completed yet.';
+  const pendingText = pendingTopics.length > 0 ? pendingTopics.slice(0, 20).join('\n') : 'All topics completed!';
+
+  const instructionText = `You are a senior Data Science interviewer. Based on the completed topics above, generate a mock technical interview for this candidate. The test should:
+
+1. Include 5 Python/Pandas coding questions (write the code, not just define)
+2. Include 3 SQL analytics questions with window functions or CTEs  
+3. Include 4 ML theory questions — ask for trade-offs and "when would you choose X over Y"
+4. Include 2 questions specific to Databricks/Spark given the candidate's production background
+5. Include 1 NLP question if NLP topics are in the completed list
+6. Include 1 system design question: design a data pipeline for a banking use case
+7. For each question, provide the expected answer and common mistakes to watch for
+8. Calibrate difficulty to mid-senior level (3-5 years DS experience equivalent)
+9. Focus questions on topics the candidate has studied — do not test topics from the pending list
+10. End with 2 behavioural questions connecting the candidate's SRE background to data science`;
+
+  document.getElementById('report-profile').textContent = profileText;
+  document.getElementById('report-completed').textContent = completedText;
+  document.getElementById('report-pending').textContent = pendingText;
+  document.getElementById('report-instruction').textContent = instructionText;
+
+  const rwEl = document.getElementById('report-weeks');
+  rwEl.innerHTML = weekBreakdown.map(({ week: w, stats, completedDays, pendingDays }) => `
+    <div style="background:white;border:0.5px solid var(--border);border-radius:10px;padding:1rem 1.25rem;margin-bottom:10px;">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;">
+        <div>
+          <div style="font-family:var(--mono);font-size:10px;color:var(--muted)">Week ${w.week} · Phase ${w.phase}</div>
+          <div style="font-size:14px;font-weight:500">${w.title}</div>
+        </div>
+        <div style="text-align:right">
+          <div style="font-family:var(--mono);font-size:18px;font-weight:500;color:${stats.pct===100?'var(--green)':stats.pct>0?'var(--amber)':'var(--muted)'}">${stats.pct}%</div>
+          <div style="font-size:11px;color:var(--muted)">${stats.done}/${stats.total}</div>
+        </div>
+      </div>
+      <div style="height:4px;background:var(--surface2);border-radius:2px;overflow:hidden;margin-bottom:8px">
+        <div style="height:100%;width:${stats.pct}%;background:${w.phase===1?'var(--phase1)':'var(--phase2)'};border-radius:2px"></div>
+      </div>
+      ${completedDays.map(d => `<div style="font-size:12px;color:var(--green);padding:2px 0">✓ Day ${d.day}: ${d.topic}${d.status==='partial'?' ('+d.done+'/'+d.total+')':''}</div>${d.note?`<div style="font-size:11px;color:var(--muted);padding-left:14px;margin-bottom:4px">${d.note}</div>`:''}`).join('')}
+      ${pendingDays.map(d => `<div style="font-size:12px;color:var(--muted);padding:2px 0">○ Day ${d.day}: ${d.topic}</div>`).join('')}
+    </div>`).join('');
+}
+
+function copyReport() {
+  const profile = document.getElementById('report-profile').textContent;
+  const completed = document.getElementById('report-completed').textContent;
+  const pending = document.getElementById('report-pending').textContent;
+  const instruction = document.getElementById('report-instruction').textContent;
+  const full = `=== DS MASTERY PLAN — PROGRESS REPORT ===\n\nCANDIDATE PROFILE\n${profile}\n\nCOMPLETED TOPICS\n${completed}\n\nPENDING TOPICS\n${pending}\n\nINSTRUCTION FOR AI AGENT\n${instruction}`;
+  navigator.clipboard.writeText(full).then(() => showToast('Report copied to clipboard!')).catch(() => showToast('Copy failed — please select and copy manually'));
+}
+
+// ── TOAST ─────────────────────────────────────────────────────────────────
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2500);
+}
+
+// ── INIT ──────────────────────────────────────────────────────────────────
+loadState();
+updateHeader();
+renderWeekList();
+initWeekSelect();
+renderPortals();
+renderCustomResources();
+</script>
+</body>
+</html>
