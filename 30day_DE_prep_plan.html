@@ -1,0 +1,878 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>30-Day Data Engineer Prep Plan</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap');
+
+  :root {
+    --bg: #080c14;
+    --surface: #0e1420;
+    --surface2: #151d2e;
+    --border: #1e2a40;
+    --border2: #263348;
+    --w1: #00d4ff;   /* week 1 - cyan */
+    --w2: #7c3aed;   /* week 2 - purple */
+    --w3: #f59e0b;   /* week 3 - amber */
+    --w4: #10b981;   /* week 4 - emerald */
+    --project: #f43f5e; /* project - rose */
+    --text: #e2e8f0;
+    --muted: #64748b;
+    --muted2: #94a3b8;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 14px;
+    line-height: 1.6;
+    padding: 24px 16px 60px;
+  }
+
+  .container { max-width: 900px; margin: 0 auto; }
+
+  /* HERO */
+  .hero {
+    position: relative;
+    padding: 40px 36px;
+    margin-bottom: 32px;
+    border-radius: 20px;
+    overflow: hidden;
+    background: var(--surface);
+    border: 1px solid var(--border);
+  }
+  .hero-grid {
+    position: absolute;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(0,212,255,0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(0,212,255,0.03) 1px, transparent 1px);
+    background-size: 32px 32px;
+  }
+  .hero-glow {
+    position: absolute;
+    top: -60px; left: -60px;
+    width: 300px; height: 300px;
+    background: radial-gradient(circle, rgba(0,212,255,0.08) 0%, transparent 70%);
+    border-radius: 50%;
+  }
+  .hero-glow2 {
+    position: absolute;
+    bottom: -80px; right: -40px;
+    width: 250px; height: 250px;
+    background: radial-gradient(circle, rgba(124,58,237,0.08) 0%, transparent 70%);
+    border-radius: 50%;
+  }
+  .hero-content { position: relative; z-index: 1; }
+  .hero-eyebrow {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--w1);
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .hero-eyebrow::before {
+    content: '';
+    display: block;
+    width: 24px;
+    height: 1px;
+    background: var(--w1);
+  }
+  .hero h1 {
+    font-size: 28px;
+    font-weight: 700;
+    color: #fff;
+    line-height: 1.2;
+    margin-bottom: 8px;
+  }
+  .hero h1 span { color: var(--w1); }
+  .hero-sub { color: var(--muted2); font-size: 14px; margin-bottom: 24px; }
+
+  .hero-stats { display: flex; flex-wrap: wrap; gap: 12px; }
+  .stat {
+    background: rgba(255,255,255,0.04);
+    border: 1px solid var(--border2);
+    border-radius: 10px;
+    padding: 10px 16px;
+    text-align: center;
+  }
+  .stat-num { font-size: 20px; font-weight: 700; color: var(--w1); line-height: 1; }
+  .stat-label { font-size: 11px; color: var(--muted); margin-top: 3px; }
+
+  /* PHILOSOPHY */
+  .philosophy {
+    background: linear-gradient(135deg, rgba(0,212,255,0.06), rgba(124,58,237,0.06));
+    border: 1px solid rgba(0,212,255,0.2);
+    border-radius: 14px;
+    padding: 20px 24px;
+    margin-bottom: 32px;
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 16px;
+    align-items: center;
+  }
+  .philosophy-icon { font-size: 32px; }
+  .philosophy-text { font-size: 13px; color: var(--muted2); line-height: 1.7; }
+  .philosophy-text strong { color: var(--w1); }
+
+  /* WEEK HEADERS */
+  .week-header {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 16px;
+    margin-top: 8px;
+  }
+  .week-num {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding: 4px 12px;
+    border-radius: 20px;
+    white-space: nowrap;
+  }
+  .w1-badge { background: rgba(0,212,255,0.12); color: var(--w1); border: 1px solid rgba(0,212,255,0.25); }
+  .w2-badge { background: rgba(124,58,237,0.12); color: var(--w2); border: 1px solid rgba(124,58,237,0.25); }
+  .w3-badge { background: rgba(245,158,11,0.12); color: var(--w3); border: 1px solid rgba(245,158,11,0.25); }
+  .w4-badge { background: rgba(16,185,129,0.12); color: var(--w4); border: 1px solid rgba(16,185,129,0.25); }
+
+  .week-title { font-size: 17px; font-weight: 700; color: #fff; }
+  .week-focus { font-size: 12px; color: var(--muted); margin-left: auto; white-space: nowrap; }
+
+  /* DAY CARDS GRID */
+  .days-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 12px;
+    margin-bottom: 12px;
+  }
+
+  .day-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    overflow: hidden;
+    transition: border-color 0.2s;
+  }
+  .day-card:hover { border-color: var(--border2); }
+
+  .day-card-header {
+    padding: 10px 14px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid var(--border);
+  }
+  .day-num {
+    font-size: 11px;
+    font-weight: 700;
+    font-family: 'JetBrains Mono', monospace;
+    color: var(--muted);
+  }
+  .day-type {
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    padding: 2px 8px;
+    border-radius: 10px;
+  }
+  .type-learn { background: rgba(0,212,255,0.1); color: var(--w1); }
+  .type-build { background: rgba(244,63,94,0.1); color: var(--project); }
+  .type-practice { background: rgba(16,185,129,0.1); color: var(--w4); }
+  .type-debug { background: rgba(245,158,11,0.1); color: var(--w3); }
+  .type-review { background: rgba(124,58,237,0.1); color: var(--w2); }
+
+  .day-card-body { padding: 12px 14px; }
+  .day-topic {
+    font-size: 13px;
+    font-weight: 600;
+    color: #fff;
+    margin-bottom: 6px;
+  }
+  .day-task {
+    font-size: 12px;
+    color: var(--muted2);
+    line-height: 1.6;
+    margin-bottom: 8px;
+  }
+  .day-output {
+    display: flex;
+    align-items: flex-start;
+    gap: 6px;
+    font-size: 11px;
+    color: var(--muted);
+    background: var(--surface2);
+    border-radius: 6px;
+    padding: 6px 10px;
+  }
+  .day-output::before { content: '→'; color: var(--w4); flex-shrink: 0; }
+
+  /* PROJECT BLOCKS */
+  .project-block {
+    background: linear-gradient(135deg, rgba(244,63,94,0.06), rgba(124,58,237,0.06));
+    border: 1px solid rgba(244,63,94,0.25);
+    border-radius: 14px;
+    padding: 20px 24px;
+    margin-bottom: 28px;
+  }
+  .project-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 14px;
+  }
+  .project-badge {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding: 3px 10px;
+    border-radius: 10px;
+    background: rgba(244,63,94,0.15);
+    color: var(--project);
+    border: 1px solid rgba(244,63,94,0.3);
+  }
+  .project-title { font-size: 15px; font-weight: 700; color: #fff; }
+  .project-desc { font-size: 13px; color: var(--muted2); margin-bottom: 14px; line-height: 1.7; }
+  .project-steps { list-style: none; display: flex; flex-direction: column; gap: 6px; }
+  .project-steps li {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    font-size: 12px;
+    color: var(--muted2);
+  }
+  .step-num {
+    width: 20px; height: 20px;
+    border-radius: 50%;
+    background: rgba(244,63,94,0.15);
+    border: 1px solid rgba(244,63,94,0.3);
+    color: var(--project);
+    font-size: 10px;
+    font-weight: 700;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+    margin-top: 1px;
+  }
+  .anomaly-tag {
+    display: inline-block;
+    font-size: 10px;
+    font-weight: 600;
+    padding: 1px 7px;
+    border-radius: 8px;
+    background: rgba(245,158,11,0.15);
+    color: var(--w3);
+    margin-left: 6px;
+  }
+
+  /* TOOLS SETUP */
+  .tools-bar {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 20px 24px;
+    margin-bottom: 32px;
+  }
+  .tools-title {
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--muted2);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin-bottom: 14px;
+  }
+  .tools-grid { display: flex; flex-wrap: wrap; gap: 8px; }
+  .tool-pill {
+    background: var(--surface2);
+    border: 1px solid var(--border2);
+    border-radius: 8px;
+    padding: 6px 12px;
+    font-size: 12px;
+    font-family: 'JetBrains Mono', monospace;
+    color: var(--muted2);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .tool-pill span { color: var(--w4); font-size: 11px; }
+
+  /* SECTION DIVIDER */
+  .section-divider {
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--border2), transparent);
+    margin: 28px 0;
+  }
+
+  /* TRUTH BOX */
+  .truth-box {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-left: 3px solid var(--project);
+    border-radius: 12px;
+    padding: 18px 22px;
+    margin-bottom: 28px;
+  }
+  .truth-box h3 { font-size: 13px; color: var(--project); font-weight: 700; margin-bottom: 10px; text-transform: uppercase; letter-spacing: 0.08em; }
+  .truth-list { list-style: none; display: flex; flex-direction: column; gap: 8px; }
+  .truth-list li { font-size: 13px; color: var(--muted2); display: flex; gap: 8px; }
+  .truth-list li::before { content: '!'; color: var(--project); font-weight: 700; flex-shrink: 0; }
+
+  /* WEEK SEPARATOR */
+  .week-sep { margin-bottom: 32px; }
+
+  /* FOOTER */
+  .footer {
+    text-align: center;
+    padding: 24px;
+    color: var(--muted);
+    font-size: 12px;
+    border-top: 1px solid var(--border);
+    margin-top: 16px;
+  }
+  .footer strong { color: var(--w1); }
+
+  @media (max-width: 600px) {
+    .days-grid { grid-template-columns: 1fr; }
+    .hero h1 { font-size: 22px; }
+    .philosophy { grid-template-columns: 1fr; }
+    .week-focus { display: none; }
+  }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <!-- HERO -->
+  <div class="hero">
+    <div class="hero-grid"></div>
+    <div class="hero-glow"></div>
+    <div class="hero-glow2"></div>
+    <div class="hero-content">
+      <div class="hero-eyebrow">Career Switch Roadmap</div>
+      <h1>30 Days to <span>Data Engineer</span><br>Interview Readiness</h1>
+      <p class="hero-sub">Project-based · Scenario-driven · Built for someone who learns by doing · 2 hrs/day</p>
+      <div class="hero-stats">
+        <div class="stat"><div class="stat-num">30</div><div class="stat-label">Days</div></div>
+        <div class="stat"><div class="stat-num">2hrs</div><div class="stat-label">Per Day</div></div>
+        <div class="stat"><div class="stat-num">3</div><div class="stat-label">Real Projects</div></div>
+        <div class="stat"><div class="stat-num">60hrs</div><div class="stat-label">Total Practice</div></div>
+        <div class="stat"><div class="stat-num">12+</div><div class="stat-label">Real Anomalies</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PHILOSOPHY -->
+  <div class="philosophy">
+    <div class="philosophy-icon">⚡</div>
+    <div class="philosophy-text">
+      <strong>How this plan works:</strong> Every topic is taught through a real scenario or anomaly — not textbook definitions. Each week ends with a mini-project you build from scratch. By Day 30, you'll have 3 working GitHub projects, hands-on debugging experience, and interview-ready answers backed by things you actually built — not just studied.
+    </div>
+  </div>
+
+  <!-- SETUP -->
+  <div class="tools-bar">
+    <div class="tools-title">⚙️ Day 0 — Environment Setup (Do This First)</div>
+    <div class="tools-grid">
+      <div class="tool-pill">🐍 <span>Install</span> Python 3.10+</div>
+      <div class="tool-pill">📓 <span>Install</span> Jupyter Notebook</div>
+      <div class="tool-pill">🔥 <span>Install</span> PySpark (pip install pyspark)</div>
+      <div class="tool-pill">🐘 <span>Install</span> Docker Desktop</div>
+      <div class="tool-pill">🗃️ <span>Install</span> DBeaver (SQL client)</div>
+      <div class="tool-pill">☁️ <span>Create</span> Databricks Community Account (free)</div>
+      <div class="tool-pill">🐙 <span>Create</span> GitHub Account + first repo</div>
+      <div class="tool-pill">📦 <span>Install</span> VS Code + Python extension</div>
+    </div>
+  </div>
+
+  <!-- WEEK 1 -->
+  <div class="week-sep">
+    <div class="week-header">
+      <span class="week-num w1-badge">Week 1 · Days 1–7</span>
+      <span class="week-title">Python for Data + PySpark Foundations</span>
+      <span class="week-focus">Core tooling</span>
+    </div>
+
+    <div class="days-grid">
+      <div class="day-card">
+        <div class="day-card-header">
+          <span class="day-num">DAY 01</span>
+          <span class="day-type type-learn">Learn</span>
+        </div>
+        <div class="day-card-body">
+          <div class="day-topic">Python for Data — Pandas Basics</div>
+          <div class="day-task">Load a CSV of sales data. Filter rows, group by category, calculate total revenue per category. Understand DataFrame vs Series.</div>
+          <div class="day-output">Output: Jupyter notebook with 10 Pandas operations on real data</div>
+        </div>
+      </div>
+
+      <div class="day-card">
+        <div class="day-card-header">
+          <span class="day-num">DAY 02</span>
+          <span class="day-type type-debug">Anomaly</span>
+        </div>
+        <div class="day-card-body">
+          <div class="day-topic">Data Quality — Nulls, Duplicates, Type Mismatches</div>
+          <div class="day-task">Take a messy dataset (download from Kaggle). Find nulls, duplicates, wrong data types. Fix each one. This is what DE work actually looks like daily.</div>
+          <div class="day-output">Output: Clean dataset + documented data quality issues found</div>
+        </div>
+      </div>
+
+      <div class="day-card">
+        <div class="day-card-header">
+          <span class="day-num">DAY 03</span>
+          <span class="day-type type-learn">Learn</span>
+        </div>
+        <div class="day-card-body">
+          <div class="day-topic">PySpark — SparkSession, RDDs, DataFrames</div>
+          <div class="day-task">Start PySpark locally. Create a SparkSession. Load a CSV into a Spark DataFrame. Run filter(), select(), groupBy(), agg(). Compare to Pandas — feel the difference.</div>
+          <div class="day-output">Output: First PySpark script that reads, filters and aggregates data</div>
+        </div>
+      </div>
+
+      <div class="day-card">
+        <div class="day-card-header">
+          <span class="day-num">DAY 04</span>
+          <span class="day-type type-debug">Anomaly</span>
+        </div>
+        <div class="day-card-body">
+          <div class="day-topic">PySpark — Lazy Evaluation in Action</div>
+          <div class="day-task">Write 5 transformations on a large file. Add .explain() to see the execution plan. Observe that nothing runs until .show() or .count(). Break a job intentionally — fix it.</div>
+          <div class="day-output">Output: Annotated script showing DAG + lazy evaluation in action</div>
+        </div>
+      </div>
+
+      <div class="day-card">
+        <div class="day-card-header">
+          <span class="day-num">DAY 05</span>
+          <span class="day-type type-learn">Learn</span>
+        </div>
+        <div class="day-card-body">
+          <div class="day-topic">PySpark — Joins & Window Functions</div>
+          <div class="day-task">Join two DataFrames (customers + orders). Then use Window functions: RANK, ROW_NUMBER, LAG on real data. This directly maps to SQL knowledge you now have.</div>
+          <div class="day-output">Output: PySpark script with 3 join types + 3 window function examples</div>
+        </div>
+      </div>
+
+      <div class="day-card">
+        <div class="day-card-header">
+          <span class="day-num">DAY 06</span>
+          <span class="day-type type-debug">Anomaly</span>
+        </div>
+        <div class="day-card-body">
+          <div class="day-topic">Shuffle Problem — Why Your Job is Slow</div>
+          <div class="day-task">Run a groupBy on a large dataset. Check Spark UI (localhost:4040). See the shuffle read/write. Then repartition() before groupBy and compare job time. This is a real production scenario.</div>
+          <div class="day-output">Output: Before/after timing comparison with explanation of shuffle cost</div>
+        </div>
+      </div>
+
+      <div class="day-card">
+        <div class="day-card-header">
+          <span class="day-num">DAY 07</span>
+          <span class="day-type type-build">Build</span>
+        </div>
+        <div class="day-card-body">
+          <div class="day-topic">Mini Project — Sales Analytics Pipeline</div>
+          <div class="day-task">Build end-to-end: ingest raw CSV → clean data → transform with PySpark → answer 5 business questions → write output as Parquet. Push to GitHub.</div>
+          <div class="day-output">Output: GitHub repo — Project 1 of 3 complete ✅</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Project 1 detail -->
+    <div class="project-block">
+      <div class="project-header">
+        <span class="project-badge">Project 1</span>
+        <span class="project-title">Sales Analytics Pipeline — End to End</span>
+      </div>
+      <p class="project-desc">Build a pipeline that ingests raw retail sales CSV data, cleans it (handle nulls, fix types, remove duplicates), transforms it using PySpark (aggregations, window functions), answers 5 business questions, and writes the output as Parquet files. This is a real DE deliverable, not a tutorial exercise.</p>
+      <ul class="project-steps">
+        <li><div class="step-num">1</div>Download a real dataset from Kaggle (retail sales or e-commerce)</li>
+        <li><div class="step-num">2</div>Ingest with PySpark, profile the data — find all quality issues <span class="anomaly-tag">anomaly</span></li>
+        <li><div class="step-num">3</div>Write cleaning functions — handle nulls, cast types, deduplicate</li>
+        <li><div class="step-num">4</div>Answer: top 10 products, revenue by region, monthly trend, customer lifetime value, anomalous orders <span class="anomaly-tag">anomaly</span></li>
+        <li><div class="step-num">5</div>Write output as Parquet, partitioned by date</li>
+        <li><div class="step-num">6</div>Push to GitHub with README explaining what you built and why each decision was made</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="section-divider"></div>
+
+  <!-- WEEK 2 -->
+  <div class="week-sep">
+    <div class="week-header">
+      <span class="week-num w2-badge">Week 2 · Days 8–14</span>
+      <span class="week-title">Hadoop Ecosystem + SQL Mastery</span>
+      <span class="week-focus">Core infrastructure</span>
+    </div>
+
+    <div class="days-grid">
+      <div class="day-card">
+        <div class="day-card-header">
+          <span class="day-num">DAY 08</span>
+          <span class="day-type type-learn">Learn</span>
+        </div>
+        <div class="day-card-body">
+          <div class="day-topic">HDFS Hands-On with Docker</div>
+          <div class="day-task">Run a single-node Hadoop cluster using Docker. Put files into HDFS using hdfs dfs commands. Read them back. See the block structure. Check NameNode web UI.</div>
+          <div class="day-output">Output: Working Docker Hadoop setup + 10 HDFS commands practiced</div>
+        </div>
+      </div>
+
+      <div class="day-card">
+        <div class="day-card-header">
+          <span class="day-num">DAY 09</span>
+          <span class="day-type type-debug">Anomaly</span>
+        </div>
+        <div class="day-card-body">
+          <div class="day-topic">HDFS — Simulate NameNode Pressure</div>
+          <div class="day-task">Create 10,000 tiny files in HDFS. Check NameNode memory usage. Then merge them into fewer larger files. Experience firsthand why small file problem is a real production issue.</div>
+          <div class="day-output">Output: Documented small file problem + solution approach</div>
+        </div>
+      </div>
+
+      <div class="day-card">
+        <div class="day-card-header">
+          <span class="day-num">DAY 10</span>
+          <span class="day-type type-learn">Learn</span>
+        </div>
+        <div class="day-card-body">
+          <div class="day-topic">Hive — Tables, Partitions, Bucketing</div>
+          <div class="day-task">Create an external Hive table on HDFS data. Add partitions by date. Run queries with and without partition pruning — measure the difference in data scanned. Then create a bucketed table.</div>
+          <div class="day-output">Output: Hive script with partitioned + bucketed table examples</div>
+        </div>
+      </div>
+
+      <div class="day-card">
+        <div class="day-card-header">
+          <span class="day-num">DAY 11</span>
+          <span class="day-type type-debug">Anomaly</span>
+        </div>
+        <div class="day-card-body">
+          <div class="day-topic">Schema Mismatch — The JAR Story Scenario</div>
+          <div class="day-task">Simulate your real production incident: create a pipeline reading a table, then add a column to the source without updating the pipeline. Watch it fail. Debug the error. Fix it. Document root cause.</div>
+          <div class="day-output">Output: Incident report + fix — your real story, now reproducible</div>
+        </div>
+      </div>
+
+      <div class="day-card">
+        <div class="day-card-header">
+          <span class="day-num">DAY 12</span>
+          <span class="day-type type-practice">Practice</span>
+        </div>
+        <div class="day-card-body">
+          <div class="day-topic">Advanced SQL — 10 Hard Problems</div>
+          <div class="day-task">Solve 10 window function + CTE problems on LeetCode SQL or HackerRank. Focus: DENSE_RANK, LAG/LEAD, running totals, conditional aggregation. Time yourself — 10 min per problem max.</div>
+          <div class="day-output">Output: 10 solved problems, screenshot your scores</div>
+        </div>
+      </div>
+
+      <div class="day-card">
+        <div class="day-card-header">
+          <span class="day-num">DAY 13</span>
+          <span class="day-type type-learn">Learn</span>
+        </div>
+        <div class="day-card-body">
+          <div class="day-topic">Delta Lake on Databricks Community</div>
+          <div class="day-task">Log into Databricks Community (free). Create a Delta table. Do an upsert (MERGE). Use time travel to query a previous version. Break schema enforcement intentionally — see the error.</div>
+          <div class="day-output">Output: Databricks notebook with Delta Lake CRUD + time travel</div>
+        </div>
+      </div>
+
+      <div class="day-card">
+        <div class="day-card-header">
+          <span class="day-num">DAY 14</span>
+          <span class="day-type type-build">Build</span>
+        </div>
+        <div class="day-card-body">
+          <div class="day-topic">Mini Project — Hive + Delta Pipeline</div>
+          <div class="day-task">Build: raw data lands in HDFS → Hive external table created → data transformed → written to Delta Lake → MERGE upsert handles duplicates. Push to GitHub.</div>
+          <div class="day-output">Output: GitHub repo — Project 2 of 3 complete ✅</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="project-block">
+      <div class="project-header">
+        <span class="project-badge">Project 2</span>
+        <span class="project-title">Hive + Delta Lake Ingestion Pipeline</span>
+      </div>
+      <p class="project-desc">Simulate a real enterprise data ingestion pattern: raw files land in HDFS, a Hive external table exposes them, PySpark transforms the data, and the result is written to a Delta Lake table with upsert logic. Includes intentional anomalies you debug and fix.</p>
+      <ul class="project-steps">
+        <li><div class="step-num">1</div>Generate synthetic raw data (Python faker library) — employee/transaction records</li>
+        <li><div class="step-num">2</div>Land in HDFS, create external Hive table with partitioning</li>
+        <li><div class="step-num">3</div>Introduce duplicate records + late-arriving data <span class="anomaly-tag">anomaly</span></li>
+        <li><div class="step-num">4</div>Transform with PySpark — clean, deduplicate, enrich</li>
+        <li><div class="step-num">5</div>Write to Delta Lake with MERGE (upsert) to handle duplicates</li>
+        <li><div class="step-num">6</div>Use Delta time travel to show state before and after MERGE <span class="anomaly-tag">anomaly</span></li>
+        <li><div class="step-num">7</div>Push to GitHub with architecture diagram in README</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="section-divider"></div>
+
+  <!-- WEEK 3 -->
+  <div class="week-sep">
+    <div class="week-header">
+      <span class="week-num w3-badge">Week 3 · Days 15–21</span>
+      <span class="week-title">ETL Pipelines + Data Modeling + NoSQL</span>
+      <span class="week-focus">Building real pipelines</span>
+    </div>
+
+    <div class="days-grid">
+      <div class="day-card">
+        <div class="day-card-header">
+          <span class="day-num">DAY 15</span>
+          <span class="day-type type-learn">Learn</span>
+        </div>
+        <div class="day-card-body">
+          <div class="day-topic">ETL vs ELT + Medallion Architecture</div>
+          <div class="day-task">Build a 3-layer Medallion pipeline: Bronze (raw), Silver (cleaned), Gold (aggregated). Use real data. Each layer writes to a separate folder/Delta table. This is standard at every company using Databricks.</div>
+          <div class="day-output">Output: 3-layer Medallion pipeline in PySpark/Databricks</div>
+        </div>
+      </div>
+
+      <div class="day-card">
+        <div class="day-card-header">
+          <span class="day-num">DAY 16</span>
+          <span class="day-type type-debug">Anomaly</span>
+        </div>
+        <div class="day-card-body">
+          <div class="day-topic">Late-Arriving Data Problem</div>
+          <div class="day-task">Build a daily pipeline. Then send data for yesterday with today's run. How do you handle it? Implement watermarking logic. See how Delta MERGE solves this problem cleanly.</div>
+          <div class="day-output">Output: Pipeline with late-arrival handling logic documented</div>
+        </div>
+      </div>
+
+      <div class="day-card">
+        <div class="day-card-header">
+          <span class="day-num">DAY 17</span>
+          <span class="day-type type-learn">Learn</span>
+        </div>
+        <div class="day-card-body">
+          <div class="day-topic">Data Modeling — Star Schema</div>
+          <div class="day-task">Design a star schema for an e-commerce dataset: fact_orders, dim_customer, dim_product, dim_date. Create tables in Hive/DBeaver. Run analytical queries. Understand why data warehouses use this design.</div>
+          <div class="day-output">Output: ERD diagram + working star schema with 5 analytical queries</div>
+        </div>
+      </div>
+
+      <div class="day-card">
+        <div class="day-card-header">
+          <span class="day-num">DAY 18</span>
+          <span class="day-type type-debug">Anomaly</span>
+        </div>
+        <div class="day-card-body">
+          <div class="day-topic">Data Skew — When One Partition Kills the Job</div>
+          <div class="day-task">Create a dataset where 80% of rows have the same key. Run a groupBy and watch Spark UI — one task takes 10x longer. Apply salting technique to fix skew. See the job balance.</div>
+          <div class="day-output">Output: Skew before/after comparison + salting solution documented</div>
+        </div>
+      </div>
+
+      <div class="day-card">
+        <div class="day-card-header">
+          <span class="day-num">DAY 19</span>
+          <span class="day-type type-learn">Learn</span>
+        </div>
+        <div class="day-card-body">
+          <div class="day-topic">NoSQL — HBase + MongoDB Basics</div>
+          <div class="day-task">Run MongoDB in Docker. Insert documents, query with filters, understand when NoSQL beats SQL (unstructured data, variable schema, high write throughput). Learn HBase column-family concept conceptually.</div>
+          <div class="day-output">Output: MongoDB CRUD script + written comparison of when to use NoSQL vs SQL</div>
+        </div>
+      </div>
+
+      <div class="day-card">
+        <div class="day-card-header">
+          <span class="day-num">DAY 20</span>
+          <span class="day-type type-practice">Practice</span>
+        </div>
+        <div class="day-card-body">
+          <div class="day-topic">Mock Interview — Concept + SQL Combined</div>
+          <div class="day-task">Do a self-timed mock: 5 concept questions (write answers, not just think them) + 3 SQL problems from LeetCode Hard category. Grade yourself honestly. Note weak spots.</div>
+          <div class="day-output">Output: Written answers + honest self-grade + weak spot list</div>
+        </div>
+      </div>
+
+      <div class="day-card">
+        <div class="day-card-header">
+          <span class="day-num">DAY 21</span>
+          <span class="day-type type-build">Build</span>
+        </div>
+        <div class="day-card-body">
+          <div class="day-topic">Mini Project — Full ETL with Anomaly Handling</div>
+          <div class="day-task">Build a pipeline that handles: nulls, duplicates, late data, schema drift, and data skew — all in one run. Medallion architecture. Document every anomaly and how you handled it.</div>
+          <div class="day-output">Output: Most complete project yet — push to GitHub ✅</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="project-block">
+      <div class="project-header">
+        <span class="project-badge">Project 3</span>
+        <span class="project-title">Production-Grade ETL Pipeline with Anomaly Handling</span>
+      </div>
+      <p class="project-desc">This is your capstone project — the one you walk interviewers through. A full pipeline that deliberately introduces and then handles every real-world data anomaly you'd face in production. This is what separates "I studied ETL" from "I built an ETL pipeline."</p>
+      <ul class="project-steps">
+        <li><div class="step-num">1</div>Generate data with intentional issues: nulls, duplicates, wrong types, outliers <span class="anomaly-tag">anomaly</span></li>
+        <li><div class="step-num">2</div>Bronze layer: ingest raw, no transformation, log record count</li>
+        <li><div class="step-num">3</div>Silver layer: clean all anomalies, log what was fixed and how many records <span class="anomaly-tag">anomaly</span></li>
+        <li><div class="step-num">4</div>Simulate late-arriving data mid-pipeline <span class="anomaly-tag">anomaly</span></li>
+        <li><div class="step-num">5</div>Gold layer: star schema aggregations, business KPIs</li>
+        <li><div class="step-num">6</div>Handle schema drift (new column added) gracefully <span class="anomaly-tag">anomaly</span></li>
+        <li><div class="step-num">7</div>Push to GitHub with full README: architecture diagram, anomalies handled, decisions made</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="section-divider"></div>
+
+  <!-- WEEK 4 -->
+  <div class="week-sep">
+    <div class="week-header">
+      <span class="week-num w4-badge">Week 4 · Days 22–30</span>
+      <span class="week-title">Interview Sharpening + Portfolio Polish</span>
+      <span class="week-focus">Job-ready</span>
+    </div>
+
+    <div class="days-grid">
+      <div class="day-card">
+        <div class="day-card-header">
+          <span class="day-num">DAY 22</span>
+          <span class="day-type type-practice">Practice</span>
+        </div>
+        <div class="day-card-body">
+          <div class="day-topic">SQL — 10 More Hard Problems</div>
+          <div class="day-task">LeetCode Hard SQL: focus on recursive CTEs, gaps and islands, pivot problems. These appear in senior-level interviews. Speed target: under 15 min per problem.</div>
+          <div class="day-output">Output: 10 solved + timed solutions committed to GitHub</div>
+        </div>
+      </div>
+
+      <div class="day-card">
+        <div class="day-card-header">
+          <span class="day-num">DAY 23</span>
+          <span class="day-type type-learn">Learn</span>
+        </div>
+        <div class="day-card-body">
+          <div class="day-topic">Spark Performance Tuning</div>
+          <div class="day-task">Learn: partition sizing (200 default, when to change), broadcast joins, caching strategy, avoiding UDFs. Apply each to your Project 3 pipeline and measure improvement.</div>
+          <div class="day-output">Output: Performance-tuned version of Project 3 with before/after metrics</div>
+        </div>
+      </div>
+
+      <div class="day-card">
+        <div class="day-card-header">
+          <span class="day-num">DAY 24</span>
+          <span class="day-type type-debug">Anomaly</span>
+        </div>
+        <div class="day-card-body">
+          <div class="day-topic">OOM Error — Executor Out of Memory</div>
+          <div class="day-task">Force an OOM error by collecting too much data to driver. Then fix it: use .write() instead of .collect(), increase executor memory config, use appropriate caching. This is a top production issue.</div>
+          <div class="day-output">Output: OOM scenario reproduced + 3 fix strategies documented</div>
+        </div>
+      </div>
+
+      <div class="day-card">
+        <div class="day-card-header">
+          <span class="day-num">DAY 25</span>
+          <span class="day-type type-practice">Practice</span>
+        </div>
+        <div class="day-card-body">
+          <div class="day-topic">System Design — Data Pipeline Architecture</div>
+          <div class="day-task">On paper, design a pipeline for: "ingest 10M records daily from 3 APIs, transform, serve to BI tool." Draw the architecture. Choose tools and justify each choice. This is a common interview question at senior levels.</div>
+          <div class="day-output">Output: Architecture diagram + written justification for each tool choice</div>
+        </div>
+      </div>
+
+      <div class="day-card">
+        <div class="day-card-header">
+          <span class="day-num">DAY 26</span>
+          <span class="day-type type-build">Build</span>
+        </div>
+        <div class="day-card-body">
+          <div class="day-topic">GitHub Portfolio Polish</div>
+          <div class="day-task">For all 3 projects: write clear READMEs (problem statement, architecture, tech used, anomalies handled, how to run). Add architecture diagrams. Make them look like professional work, not student exercises.</div>
+          <div class="day-output">Output: 3 polished, presentable GitHub repos ready to share in interviews</div>
+        </div>
+      </div>
+
+      <div class="day-card">
+        <div class="day-card-header">
+          <span class="day-num">DAY 27</span>
+          <span class="day-type type-practice">Practice</span>
+        </div>
+        <div class="day-card-body">
+          <div class="day-topic">Full Mock Interview — 60 Minutes</div>
+          <div class="day-task">Time yourself: 5 min intro, 20 min concepts, 20 min SQL coding, 10 min project walkthrough, 5 min behavioral. Record yourself on phone. Watch it back. Painful but essential.</div>
+          <div class="day-output">Output: Recorded mock + honest self-critique notes</div>
+        </div>
+      </div>
+
+      <div class="day-card">
+        <div class="day-card-header">
+          <span class="day-num">DAY 28</span>
+          <span class="day-type type-practice">Practice</span>
+        </div>
+        <div class="day-card-body">
+          <div class="day-topic">Fix Weak Spots from Mock</div>
+          <div class="day-task">From Day 27 recording — list your top 3 weak spots. Spend 2 hours drilling specifically those. No other topics today. Focused repair beats broad revision.</div>
+          <div class="day-output">Output: 3 weak spots identified and addressed</div>
+        </div>
+      </div>
+
+      <div class="day-card">
+        <div class="day-card-header">
+          <span class="day-num">DAY 29</span>
+          <span class="day-type type-practice">Practice</span>
+        </div>
+        <div class="day-card-body">
+          <div class="day-topic">Start Applying + Tailor Resume</div>
+          <div class="day-task">Update resume: add 3 GitHub projects, update skills section with tools used. Apply to 5 targeted roles: "Data Reliability Engineer", "Big Data Support → Engineer", "Junior Data Engineer". Quantity matters less than targeting right now.</div>
+          <div class="day-output">Output: Updated resume + 5 applications submitted</div>
+        </div>
+      </div>
+
+      <div class="day-card">
+        <div class="day-card-header">
+          <span class="day-num">DAY 30</span>
+          <span class="day-type type-review">Review</span>
+        </div>
+        <div class="day-card-body">
+          <div class="day-topic">Day 30 Honest Self-Assessment</div>
+          <div class="day-task">Re-answer the same 12 mock interview questions from tonight. Score yourself. Compare to your scores today. Write what still needs depth work for Month 2. Celebrate the delta, not the destination.</div>
+          <div class="day-output">Output: Day 30 score vs Day 0 score — measurable proof of progress</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TRUTH BOX -->
+  <div class="truth-box">
+    <h3>⚠️ Honest Expectations — Read Before You Start</h3>
+    <ul class="truth-list">
+      <li>Day 30 makes you interview-ready for entry-level Data Engineer conversations — not senior roles. That takes another 30-60 days of depth work.</li>
+      <li>Missing even 3-4 days breaks the compounding. If life happens, make up days on weekends — don't skip and move forward.</li>
+      <li>Projects matter more than topics studied. An interviewer who sees 3 working GitHub projects will forgive gaps in theoretical knowledge. Someone with no projects but perfect notes gets rejected.</li>
+      <li>2 hours/day means 2 focused hours — not 2 hours with phone nearby. Distracted hours don't count toward this plan.</li>
+      <li>The anomaly days are not optional. They're the difference between "I studied this" and "I've debugged this" — the latter is what gets you hired.</li>
+    </ul>
+  </div>
+
+  <div class="footer">
+    <strong>30-Day Data Engineer Prep Plan</strong> · Built for project-based learners · 2 hrs/day · 16GB RAM local setup<br>
+    <span style="color:#1e2a40; margin-top:6px; display:block">The gap between support and engineering closes faster when you build things that break — and fix them.</span>
+  </div>
+
+</div>
+</body>
+</html>
